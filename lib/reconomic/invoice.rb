@@ -41,31 +41,31 @@ class Reconomic::Invoice
     attribute :vat_amount, Shale::Type::String
 
     json do
-      map "bookedInvoiceNumber", :to => :booked_invoice_number
-      map "currency", :to => :currency
-      map "customer", :to => :customer, :using => {:from => :customer_from_json, :to => :customer_to_json}
-      map "date", :to => :date
-      map "delivery", :to => :delivery
-      map "deliveryLocation", :to => :delivery_location
-      map "dueDate", :to => :due_date
-      map "exchangeRate", :to => :exchange_rate
-      map "grossAmount", :to => :gross_amount
-      map "grossAmountInBaseCurrency", :to => :gross_amount_in_base_currency
-      map "layout", :to => :layout
-      map "lines", :to => :lines
-      map "netAmount", :to => :net_amount
-      map "netAmountInBaseCurrency", :to => :net_amount_in_base_currency
-      map "notes", :to => :notes
-      map "paymentTerms", :to => :payment_terms, :using => {:from => :payment_terms_from_json, :to => :payment_terms_to_json}
-      map "pdf", :to => :pdf
-      map "project", :to => :project
-      map "recipient", :to => :recipient
-      map "references", :to => :references
-      map "remainder", :to => :remainder
-      map "remainderInBaseCurrency", :to => :remainder_in_base_currency
-      map "roundingAmount", :to => :rounding_amount
-      map "sent", :to => :sent
-      map "vatAmount", :to => :vat_amount
+      map "bookedInvoiceNumber", to: :booked_invoice_number
+      map "currency", to: :currency
+      map "customer", to: :customer, using: {from: :customer_from_json, to: :customer_to_json}
+      map "date", to: :date
+      map "delivery", to: :delivery
+      map "deliveryLocation", to: :delivery_location
+      map "dueDate", to: :due_date
+      map "exchangeRate", to: :exchange_rate
+      map "grossAmount", to: :gross_amount
+      map "grossAmountInBaseCurrency", to: :gross_amount_in_base_currency
+      map "layout", to: :layout
+      map "lines", to: :lines
+      map "netAmount", to: :net_amount
+      map "netAmountInBaseCurrency", to: :net_amount_in_base_currency
+      map "notes", to: :notes
+      map "paymentTerms", to: :payment_terms, using: {from: :payment_terms_from_json, to: :payment_terms_to_json}
+      map "pdf", to: :pdf
+      map "project", to: :project
+      map "recipient", to: :recipient
+      map "references", to: :references
+      map "remainder", to: :remainder
+      map "remainderInBaseCurrency", to: :remainder_in_base_currency
+      map "roundingAmount", to: :rounding_amount
+      map "sent", to: :sent
+      map "vatAmount", to: :vat_amount
     end
 
     def customer_from_json(model, value)
@@ -114,11 +114,10 @@ class Reconomic::Invoice
     :rounding_amount,
     :sent,
     :vat_amount,
-
-  class << self
-    def retrieve(number:, session:)
+    class << self
+      def retrieve(number:, session:)
+      end
     end
-  end
 
   def initialize(values = {})
     initialize_from(values)
@@ -128,13 +127,8 @@ class Reconomic::Invoice
     values.each do |key, value|
       property_name = ActiveSupport::Inflector.underscore(key.to_s)
       setter_name = "#{property_name.underscore}="
-      self.send(setter_name, value) if self.respond_to?(setter_name)
+      send(setter_name, value) if respond_to?(setter_name)
     end
-  end
-
-  def lines
-    # TODO: Some sort of collection object?
-    @lines ||= []
   end
 
   # https://restdocs.e-conomic.com/#post-invoices-drafts
@@ -151,11 +145,11 @@ class Reconomic::Invoice
       .headers({
         :content_type => "application/json",
         "X-AgreementGrantToken" => session.agreement_grant_token,
-        "X-AppSecretToken" => session.app_secret_token,
+        "X-AppSecretToken" => session.app_secret_token
       })
       .post(
         "https://restapi.e-conomic.com/invoices/drafts",
-        :body => body
+        body: body
 
       )
     raise response.body.to_s unless response.status.success?
@@ -164,6 +158,6 @@ class Reconomic::Invoice
   private
 
   def construct_json_for_save
-    Mapper.to_json(self, :pretty => true)
+    Mapper.to_json(self, pretty: true)
   end
 end

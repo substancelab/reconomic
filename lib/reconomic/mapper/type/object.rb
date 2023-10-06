@@ -1,4 +1,4 @@
-require 'shale/type/value'
+require "shale/type/value"
 
 module Reconomic
   module Mapper

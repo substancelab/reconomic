@@ -3,15 +3,15 @@
 require_relative "lib/reconomic/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "reconomic"
-  spec.version       = Reconomic::VERSION
-  spec.authors       = ["Jakob Skjerning"]
-  spec.email         = ["jakob@substancelab.com"]
+  spec.name = "reconomic"
+  spec.version = Reconomic::VERSION
+  spec.authors = ["Jakob Skjerning"]
+  spec.email = ["jakob@substancelab.com"]
 
-  spec.summary       = "Wrapper around e-conomics REST API"
+  spec.summary = "Wrapper around e-conomics REST API"
   # spec.description   = "TODO: Write a longer description or delete this line."
   # spec.homepage      = "TODO: Put your gem's website or public repo URL here."
-  spec.license       = "MIT"
+  spec.license = "MIT"
   spec.required_ruby_version = ">= 2.4.0"
 
   spec.metadata["allowed_push_host"] = "TODO: Set to 'https://mygemserver.com'"
@@ -24,8 +24,8 @@ Gem::Specification.new do |spec|
   spec.files = Dir.chdir(File.expand_path(__dir__)) do
     `git ls-files -z`.split("\x0").reject { |f| f.match(%r{\A(?:test|spec|features)/}) }
   end
-  spec.bindir        = "exe"
-  spec.executables   = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
+  spec.bindir = "exe"
+  spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
   # Uncomment to register a new dependency of your gem

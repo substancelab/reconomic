@@ -50,42 +50,42 @@ class Reconomic::Customer
     attribute :zip, Shale::Type::String
 
     json do
-      map "address", :to => :address
-      map "attention", :to => :attention
-      map "balance", :to => :balance
-      map "barred", :to => :barred
-      map "city", :to => :city
-      map "contacts", :to => :contacts
+      map "address", to: :address
+      map "attention", to: :attention
+      map "balance", to: :balance
+      map "barred", to: :barred
+      map "city", to: :city
+      map "contacts", to: :contacts
       map "corporateIdentificationNumber", to: :corporate_identification_number
-      map "country", :to => :country
-      map "creditLimit", :to => :credit_limit
-      map "currency", :to => :currency
-      map "customerContact", :to => :customer_contact
-      map "customerGroup", :to => :customer_group
-      map "customerNumber", :to => :customer_number
-      map "defaultDeliveryLocation", :to => :default_delivery_location
-      map "deliveryLocations", :to => :delivery_locations
-      map "dueAmount", :to => :due_amount
-      map "ean", :to => :ean
-      map "eInvoicingDisabledByDefault", :to => :e_invoicing_disabled_by_default
-      map "email", :to => :email
-      map "invoices", :to => :invoices
-      map "lastUpdated", :to => :last_updated
-      map "layout", :to => :layout
-      map "metaData", :to => :meta_data
-      map "mobilePhone", :to => :mobile_phone
-      map "name", :to => :name
-      map "paymentTerms", :to => :payment_terms
-      map "pNumber", :to => :p_number
-      map "publicEntryNumber", :to => :public_entry_number
-      map "salesPerson", :to => :sales_person
-      map "telephoneAndFaxNumber", :to => :telephone_and_fax_number
-      map "templates", :to => :templates
-      map "totals", :to => :totals
-      map "vatNumber", :to => :vat_number
-      map "vatZone", :to => :vat_zone
-      map "website", :to => :website
-      map "zip", :to => :zip
+      map "country", to: :country
+      map "creditLimit", to: :credit_limit
+      map "currency", to: :currency
+      map "customerContact", to: :customer_contact
+      map "customerGroup", to: :customer_group
+      map "customerNumber", to: :customer_number
+      map "defaultDeliveryLocation", to: :default_delivery_location
+      map "deliveryLocations", to: :delivery_locations
+      map "dueAmount", to: :due_amount
+      map "ean", to: :ean
+      map "eInvoicingDisabledByDefault", to: :e_invoicing_disabled_by_default
+      map "email", to: :email
+      map "invoices", to: :invoices
+      map "lastUpdated", to: :last_updated
+      map "layout", to: :layout
+      map "metaData", to: :meta_data
+      map "mobilePhone", to: :mobile_phone
+      map "name", to: :name
+      map "paymentTerms", to: :payment_terms
+      map "pNumber", to: :p_number
+      map "publicEntryNumber", to: :public_entry_number
+      map "salesPerson", to: :sales_person
+      map "telephoneAndFaxNumber", to: :telephone_and_fax_number
+      map "templates", to: :templates
+      map "totals", to: :totals
+      map "vatNumber", to: :vat_number
+      map "vatZone", to: :vat_zone
+      map "website", to: :website
+      map "zip", to: :zip
     end
 
     class << self
@@ -98,7 +98,7 @@ class Reconomic::Customer
           .headers({
             :accept => "application/json",
             "X-AgreementGrantToken" => session.agreement_grant_token,
-            "X-AppSecretToken" => session.app_secret_token,
+            "X-AppSecretToken" => session.app_secret_token
           })
           .get(
             "https://restapi.e-conomic.com/customers/#{number}"
@@ -111,7 +111,7 @@ class Reconomic::Customer
       values.each do |key, value|
         property_name = ActiveSupport::Inflector.underscore(key)
         setter_name = "#{property_name.underscore}="
-        self.send(setter_name, value) if self.respond_to?(setter_name)
+        send(setter_name, value) if respond_to?(setter_name)
       end
     end
   end
@@ -164,7 +164,7 @@ class Reconomic::Customer
         .headers({
           :accept => "application/json",
           "X-AgreementGrantToken" => session.agreement_grant_token,
-          "X-AppSecretToken" => session.app_secret_token,
+          "X-AppSecretToken" => session.app_secret_token
         })
         .get(
           "https://restapi.e-conomic.com/customers/#{number}"
@@ -177,7 +177,7 @@ class Reconomic::Customer
     values.each do |key, value|
       property_name = ActiveSupport::Inflector.underscore(key)
       setter_name = "#{property_name.underscore}="
-      self.send(setter_name, value) if self.respond_to?(setter_name)
+      send(setter_name, value) if respond_to?(setter_name)
     end
   end
 
