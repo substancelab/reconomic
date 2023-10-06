@@ -25,7 +25,7 @@ class Reconomic::Invoice
     attribute :gross_amount, Shale::Type::String
     attribute :gross_amount_in_base_currency, Shale::Type::String
     attribute :layout, Shale::Type::String
-    attribute :lines, Shale::Type::String
+    attribute :lines, Shale::Type::String, default: -> { [] }
     attribute :net_amount, Shale::Type::String
     attribute :net_amount_in_base_currency, Shale::Type::String
     attribute :notes, Shale::Type::String
@@ -100,7 +100,6 @@ class Reconomic::Invoice
     :gross_amount,
     :gross_amount_in_base_currency,
     :layout,
-    :lines,
     :net_amount,
     :net_amount_in_base_currency,
     :notes,
@@ -113,11 +112,13 @@ class Reconomic::Invoice
     :remainder_in_base_currency,
     :rounding_amount,
     :sent,
-    :vat_amount,
-    class << self
-      def retrieve(number:, session:)
-      end
+    :vat_amount
+  attr_writer :lines
+
+  class << self
+    def retrieve(number:, session:)
     end
+  end
 
   def initialize(values = {})
     initialize_from(values)
@@ -129,6 +130,10 @@ class Reconomic::Invoice
       setter_name = "#{property_name.underscore}="
       send(setter_name, value) if respond_to?(setter_name)
     end
+  end
+
+  def lines
+    self.lines ||= []
   end
 
   # https://restdocs.e-conomic.com/#post-invoices-drafts
