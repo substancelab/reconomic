@@ -133,7 +133,7 @@ class Reconomic::Customer
     end
 
     def retrieve(number:, session:)
-      response_body = session.get("https://restapi.e-conomic.com/customers/#{number}")
+      response_body = session.get("/customers/#{number}")
       construct_from(response_body)
     end
   end

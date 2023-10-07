@@ -25,7 +25,7 @@ describe Reconomic::Session do
         .to_return(body: body)
 
       session = Reconomic::Session.new
-      response_body = session.get("https://restapi.e-conomic.com/customers/1")
+      response_body = session.get("/customers/1")
 
       _(response_body).must_equal({"customerNumber" => 1}.to_json)
     end
@@ -44,7 +44,7 @@ describe Reconomic::Session do
         .to_return(status: 200)
 
       session = Reconomic::Session.new
-      session.post("https://restapi.e-conomic.com/invoices/drafts", body)
+      session.post("/invoices/drafts", body)
     end
 
     it "raises an error if the request fails" do
@@ -60,7 +60,7 @@ describe Reconomic::Session do
 
       session = Reconomic::Session.new
       _ {
-        session.post("https://restapi.e-conomic.com/invoices/drafts", body)
+        session.post("/invoices/drafts", body)
       }.must_raise(RuntimeError)
     end
   end
