@@ -144,7 +144,6 @@ class Reconomic::Invoice
   def save(session:)
     raise "Expected payment terms to not be a string" if payment_terms.is_a?(String)
     body = construct_json_for_save
-    puts body
 
     response = HTTP
       .headers({
