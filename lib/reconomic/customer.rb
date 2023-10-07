@@ -87,25 +87,6 @@ class Reconomic::Customer
       map "website", to: :website
       map "zip", to: :zip
     end
-
-    class << self
-      def construct_from(json)
-        from_json(json || "")
-      end
-
-      def retrieve(number:, session:)
-        response = HTTP
-          .headers({
-            :accept => "application/json",
-            "X-AgreementGrantToken" => session.agreement_grant_token,
-            "X-AppSecretToken" => session.app_secret_token
-          })
-          .get(
-            "https://restapi.e-conomic.com/customers/#{number}"
-          )
-        construct_from(response.body.to_s)
-      end
-    end
   end
 
   attr_accessor \
