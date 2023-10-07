@@ -133,7 +133,7 @@ class Reconomic::Invoice
   end
 
   def lines
-    self.lines ||= []
+    @lines ||= []
   end
 
   # https://restdocs.e-conomic.com/#post-invoices-drafts
