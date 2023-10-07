@@ -133,16 +133,8 @@ class Reconomic::Customer
     end
 
     def retrieve(number:, session:)
-      response = HTTP
-        .headers({
-          :accept => "application/json",
-          "X-AgreementGrantToken" => session.agreement_grant_token,
-          "X-AppSecretToken" => session.app_secret_token
-        })
-        .get(
-          "https://restapi.e-conomic.com/customers/#{number}"
-        )
-      construct_from(response.body.to_s)
+      response_body = session.get("https://restapi.e-conomic.com/customers/#{number}")
+      construct_from(response_body)
     end
   end
 end
