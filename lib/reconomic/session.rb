@@ -8,4 +8,36 @@ class Reconomic::Session
     @agreement_grant_token = agreement_grant_token
     @app_secret_token = app_secret_token
   end
+
+  def get(path)
+    response = authenticated_request.get(url(path))
+    response.body.to_s
+  end
+
+  def hostname
+    URI.parse("https://restapi.e-conomic.com")
+  end
+
+  def post(path, body)
+    response = authenticated_request.post(
+      url(path),
+      body: body
+    )
+    raise response.body.to_s unless response.status.success?
+  end
+
+  private
+
+  def authenticated_request
+    HTTP
+      .headers({
+        :content_type => "application/json",
+        "X-AgreementGrantToken" => agreement_grant_token,
+        "X-AppSecretToken" => app_secret_token
+      })
+  end
+
+  def url(path)
+    hostname + path
+  end
 end
