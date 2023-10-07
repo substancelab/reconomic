@@ -106,14 +106,6 @@ class Reconomic::Customer
         construct_from(response.body.to_s)
       end
     end
-
-    def initialize_from(values)
-      values.each do |key, value|
-        property_name = ActiveSupport::Inflector.underscore(key)
-        setter_name = "#{property_name.underscore}="
-        send(setter_name, value) if respond_to?(setter_name)
-      end
-    end
   end
 
   attr_accessor \
@@ -172,16 +164,4 @@ class Reconomic::Customer
       construct_from(response.body.to_s)
     end
   end
-
-  def initialize_from(values)
-    values.each do |key, value|
-      property_name = ActiveSupport::Inflector.underscore(key)
-      setter_name = "#{property_name.underscore}="
-      send(setter_name, value) if respond_to?(setter_name)
-    end
-  end
-
-  private
-
-  # attr_writer :data
 end
