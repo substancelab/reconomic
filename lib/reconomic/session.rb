@@ -10,13 +10,7 @@ class Reconomic::Session
   end
 
   def get(path)
-    response = HTTP
-      .headers({
-        :accept => "application/json",
-        "X-AgreementGrantToken" => agreement_grant_token,
-        "X-AppSecretToken" => app_secret_token
-      })
-      .get(url(path))
+    response = authenticated_request.get(url(path))
     response.body.to_s
   end
 
@@ -25,20 +19,23 @@ class Reconomic::Session
   end
 
   def post(path, body)
-    response = HTTP
+    response = authenticated_request.post(
+      url(path),
+      body: body
+    )
+    raise response.body.to_s unless response.status.success?
+  end
+
+  private
+
+  def authenticated_request
+    HTTP
       .headers({
         :content_type => "application/json",
         "X-AgreementGrantToken" => agreement_grant_token,
         "X-AppSecretToken" => app_secret_token
       })
-      .post(
-        url(path),
-        body: body
-      )
-    raise response.body.to_s unless response.status.success?
   end
-
-  private
 
   def url(path)
     hostname + path
