@@ -144,19 +144,7 @@ class Reconomic::Invoice
   def save(session:)
     raise "Expected payment terms to not be a string" if payment_terms.is_a?(String)
     body = construct_json_for_save
-
-    response = HTTP
-      .headers({
-        :content_type => "application/json",
-        "X-AgreementGrantToken" => session.agreement_grant_token,
-        "X-AppSecretToken" => session.app_secret_token
-      })
-      .post(
-        "https://restapi.e-conomic.com/invoices/drafts",
-        body: body
-
-      )
-    raise response.body.to_s unless response.status.success?
+    session.post("https://restapi.e-conomic.com/invoices/drafts", body)
   end
 
   private

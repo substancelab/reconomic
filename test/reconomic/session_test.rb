@@ -30,4 +30,38 @@ describe Reconomic::Session do
       _(response_body).must_equal({"customerNumber" => 1}.to_json)
     end
   end
+
+  describe "#post" do
+    it "makes a POST request to the API" do
+      body = "{\"customerNumber\":1}"
+      stub_request(:post, "https://restapi.e-conomic.com/invoices/drafts")
+        .with(
+          body: body,
+          headers: {
+            "Content-Type" => "application/json"
+          }
+        )
+        .to_return(status: 200)
+
+      session = Reconomic::Session.new
+      session.post("https://restapi.e-conomic.com/invoices/drafts", body)
+    end
+
+    it "raises an error if the request fails" do
+      body = "{\"customerNumber\":1}"
+      stub_request(:post, "https://restapi.e-conomic.com/invoices/drafts")
+        .with(
+          body: body,
+          headers: {
+            "Content-Type" => "application/json"
+          }
+        )
+        .to_return(status: 500)
+
+      session = Reconomic::Session.new
+      _ {
+        session.post("https://restapi.e-conomic.com/invoices/drafts", body)
+      }.must_raise(RuntimeError)
+    end
+  end
 end

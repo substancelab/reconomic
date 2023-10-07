@@ -19,4 +19,18 @@ class Reconomic::Session
       .get(url)
     response.body.to_s
   end
+
+  def post(url, body)
+    response = HTTP
+      .headers({
+        :content_type => "application/json",
+        "X-AgreementGrantToken" => agreement_grant_token,
+        "X-AppSecretToken" => app_secret_token
+      })
+      .post(
+        url,
+        body: body
+      )
+    raise response.body.to_s unless response.status.success?
+  end
 end
