@@ -27,6 +27,14 @@ class Reconomic::Session
     raise response.body.to_s unless response.status.success?
   end
 
+  def put(path, body)
+    response = authenticated_request.put(
+      url(path),
+      body: body
+    )
+    raise response.body.to_s unless response.status.success?
+  end
+
   private
 
   def authenticated_request
