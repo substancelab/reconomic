@@ -132,8 +132,19 @@ class Reconomic::Customer
       Mapper.from_json(json || "")
     end
 
+    # https://restdocs.e-conomic.com/#post-customers
+    def create(properties, session:)
+      response_body = session.post("/customers", properties.to_json)
+      construct_from(response_body)
+    end
+
     def retrieve(number:, session:)
       response_body = session.get("/customers/#{number}")
+      construct_from(response_body)
+    end
+
+    def update(number, properties, session:)
+      response_body = session.put("/customers/#{number}", properties.to_json)
       construct_from(response_body)
     end
   end

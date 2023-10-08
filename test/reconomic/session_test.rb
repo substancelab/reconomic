@@ -64,4 +64,40 @@ describe Reconomic::Session do
       }.must_raise(RuntimeError)
     end
   end
+
+  describe "#put" do
+    it "makes a PUT request to the API" do
+      body = "{\"customerNumber\":1}"
+      stub_request(:put, "https://restapi.e-conomic.com/customers/42")
+        .with(
+          body: body,
+          headers: {
+            "Content-Type" => "application/json"
+          }
+        )
+        .to_return(status: 200)
+
+      session = Reconomic::Session.new
+      session.put("/customers/42", body)
+
+      assert_requested(:put, "https://restapi.e-conomic.com/customers/42")
+    end
+
+    it "raises an error if the request fails" do
+      body = "{\"customerNumber\":1}"
+      stub_request(:put, "https://restapi.e-conomic.com/customers/42")
+        .with(
+          body: body,
+          headers: {
+            "Content-Type" => "application/json"
+          }
+        )
+        .to_return(status: 500)
+
+      session = Reconomic::Session.new
+      _ {
+        session.put("/customers/42", body)
+      }.must_raise(RuntimeError)
+    end
+  end
 end
