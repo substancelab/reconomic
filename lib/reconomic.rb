@@ -9,5 +9,7 @@ require_relative "reconomic/session"
 
 module Reconomic
   class Error < StandardError; end
-  # Your code goes here...
+
+  # Used when the e-conomic API returns an error
+  class EconomicError < Error; end
 end

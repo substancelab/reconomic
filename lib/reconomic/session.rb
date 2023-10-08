@@ -11,6 +11,7 @@ class Reconomic::Session
 
   def get(path)
     response = authenticated_request.get(url(path))
+    raise Reconomic::EconomicError, response.status.to_s unless response.status.success?
     response.body.to_s
   end
 

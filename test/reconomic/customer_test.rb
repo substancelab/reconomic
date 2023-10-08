@@ -31,5 +31,16 @@ describe Reconomic::Customer do
       _(customer.customer_number).must_equal(1)
       _(customer.name).must_equal("John Doe")
     end
+
+    it "raises an error if the request fails" do
+      stub_request(:get, "https://restapi.e-conomic.com/customers/1")
+        .to_return(status: 401)
+
+      session = Reconomic::Session.new
+
+      _ {
+        Reconomic::Customer.retrieve(number: 1, session: session)
+      }.must_raise(Reconomic::EconomicError)
+    end
   end
 end
