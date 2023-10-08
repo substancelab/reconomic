@@ -1,6 +1,7 @@
 require "http"
 require "shale"
 
+require "reconomic/collection"
 require "reconomic/mapper/type/object"
 
 # For more information please look at the Danish e-copedia article
@@ -142,10 +143,7 @@ class Reconomic::Customer
 
     def list(session:)
       response_body = session.get("/customers")
-      collection = JSON.parse(response_body).fetch("collection")
-      collection.map { |customer_properties|
-        construct_from(customer_properties)
-      }
+      Reconomic::Collection.construct_from(response_body, model: self)
     end
 
     def retrieve(number:, session:)

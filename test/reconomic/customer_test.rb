@@ -89,18 +89,40 @@ describe Reconomic::Customer do
 
   describe ".list" do
     it "returns a list of Customers from the API" do
-      properties = {
-        "currency" => "EUR",
-        "customerGroup" => {
-          "customerGroupNumber" => 1
+      response = {
+        "collection" => [
+          {
+            "currency" => "EUR",
+            "customerGroup" => {
+              "customerGroupNumber" => 1
+            },
+            "name" => "Acme Inc",
+            "paymentTerms" => {
+              "paymentTermsNumber" => 2
+            },
+            "vatZone" => {
+              "vatZoneNumber" => 2
+            }
+          }
+        ],
+        "pagination" => {
+          "maxPageSizeAllowed" => 1000,
+          "skipPages" => 0,
+          "pageSize" => 20,
+          "results" => 32,
+          "resultsWithoutFilter" => 32,
+          "firstPage" => "https://restapi.e-conomic.com/customers?skippages=0&pagesize=20",
+          "nextPage" => "https://restapi.e-conomic.com/customers?skippages=1&pagesize=20",
+          "lastPage" => "https://restapi.e-conomic.com/customers?skippages=1&pagesize=20"
         },
-        "name" => "Acme Inc",
-        "paymentTerms" => {
-          "paymentTermsNumber" => 2
+        "metaData" => {
+          "create" => {
+            "description" => "Create a new customer",
+            "href" => "https://restapi.e-conomic.com/customers",
+            "httpMethod" => "post"
+          }
         },
-        "vatZone" => {
-          "vatZoneNumber" => 2
-        }
+        "self" => "https://restapi.e-conomic.com/customers"
       }
 
       session = Reconomic::Session.new
@@ -110,14 +132,14 @@ describe Reconomic::Customer do
             "Content-Type" => "application/json"
           }
         )
-        .to_return(body: [properties].to_json, status: 200)
+        .to_return(body: response.to_json, status: 200)
 
       results = Reconomic::Customer.list(
         session: session
       )
 
       assert_requested(:get, "https://restapi.e-conomic.com/customers")
-      _(results).must_be_kind_of(Enumerable)
+      _(results).must_be_instance_of(Reconomic::Collection)
       _(results.first.name).must_equal("Acme Inc")
     end
   end
