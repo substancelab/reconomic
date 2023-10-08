@@ -18,6 +18,41 @@ describe Reconomic::Customer do
     end
   end
 
+  describe ".create" do
+    it "posts a customer to the API" do
+      properties = {
+        "currency" => "EUR",
+        "customerGroup" => {
+          "customerGroupNumber" => 1
+        },
+        "name" => "Acme Inc",
+        "paymentTerms" => {
+          "paymentTermsNumber" => 2
+        },
+        "vatZone" => {
+          "vatZoneNumber" => 2
+        }
+      }
+
+      session = Reconomic::Session.new
+      stub_request(:post, "https://restapi.e-conomic.com/customers")
+        .with(
+          body: properties,
+          headers: {
+            "Content-Type" => "application/json"
+          }
+        )
+        .to_return(status: 200)
+
+      Reconomic::Customer.create(
+        properties,
+        session: session
+      )
+
+      assert_requested(:post, "https://restapi.e-conomic.com/customers")
+    end
+  end
+
   describe ".retrieve" do
     it "retrieves a customer from the API" do
       body = "{\"customerNumber\":1,\"name\":\"John Doe\",\"address\":\"Somewhere\"}"
