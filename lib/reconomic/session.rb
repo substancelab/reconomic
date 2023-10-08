@@ -25,6 +25,7 @@ class Reconomic::Session
       body: body
     )
     raise response.body.to_s unless response.status.success?
+    response.body.to_s
   end
 
   def put(path, body)
@@ -33,6 +34,7 @@ class Reconomic::Session
       body: body
     )
     raise response.body.to_s unless response.status.success?
+    response.body.to_s
   end
 
   private
