@@ -28,6 +28,10 @@ class Reconomic::Session
     response.body.to_s
   end
 
+  # Update a resource by sending a PUT request to the API.
+  #
+  # Note that PUT requests expect the entire resource to be sent in the request,
+  # ie there is no partial update.
   def put(path, body)
     response = authenticated_request.put(
       url(path),
