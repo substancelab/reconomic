@@ -1,6 +1,7 @@
 require "reconomic/mapper/type/list"
 require "reconomic/mapper/type/object"
 
+# https://restdocs.e-conomic.com/#collections-vs-resources
 class Reconomic::Collection
   class Mapper < Shale::Mapper
     model Reconomic::Collection

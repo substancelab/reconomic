@@ -88,8 +88,8 @@ describe Reconomic::Customer do
   end
 
   describe ".list" do
-    it "returns a list of Customers from the API" do
-      response = {
+    before do
+      @response = {
         "collection" => [
           {
             "currency" => "EUR",
@@ -124,23 +124,43 @@ describe Reconomic::Customer do
         },
         "self" => "https://restapi.e-conomic.com/customers"
       }
+    end
 
+    it "returns the first page of Customers from the API" do
       session = Reconomic::Session.new
-      stub_request(:get, "https://restapi.e-conomic.com/customers")
+      stub_request(:get, "https://restapi.e-conomic.com/customers?skippages=0")
         .with(
           headers: {
             "Content-Type" => "application/json"
           }
         )
-        .to_return(body: response.to_json, status: 200)
+        .to_return(body: @response.to_json, status: 200)
 
       results = Reconomic::Customer.list(
         session: session
       )
 
-      assert_requested(:get, "https://restapi.e-conomic.com/customers")
+      assert_requested(:get, "https://restapi.e-conomic.com/customers?skippages=0")
       _(results).must_be_instance_of(Reconomic::Collection)
       _(results.first.name).must_equal("Acme Inc")
+    end
+
+    it "returns the next page of Customers from the API" do
+      session = Reconomic::Session.new
+      stub_request(:get, "https://restapi.e-conomic.com/customers?skippages=1")
+        .with(
+          headers: {
+            "Content-Type" => "application/json"
+          }
+        )
+        .to_return(body: @response.to_json, status: 200)
+
+      Reconomic::Customer.list(
+        session: session,
+        skip_pages: 1
+      )
+
+      assert_requested(:get, "https://restapi.e-conomic.com/customers?skippages=1")
     end
   end
 

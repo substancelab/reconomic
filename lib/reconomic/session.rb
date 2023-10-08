@@ -9,8 +9,8 @@ class Reconomic::Session
     @app_secret_token = app_secret_token
   end
 
-  def get(path)
-    response = authenticated_request.get(url(path))
+  def get(path, params: {})
+    response = authenticated_request.get(url(path), params: params)
     raise Reconomic::EconomicError, response.status.to_s unless response.status.success?
     response.body.to_s
   end

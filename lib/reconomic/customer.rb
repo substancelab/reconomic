@@ -141,8 +141,8 @@ class Reconomic::Customer
       construct_from(response_body)
     end
 
-    def list(session:)
-      response_body = session.get("/customers")
+    def list(session:, skip_pages: 0)
+      response_body = session.get("/customers", params: {skippages: skip_pages})
       Reconomic::Collection.construct_from(response_body, model: self)
     end
 
