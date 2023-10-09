@@ -87,6 +87,83 @@ describe Reconomic::Customer do
     end
   end
 
+  describe ".list" do
+    before do
+      @response = {
+        "collection" => [
+          {
+            "currency" => "EUR",
+            "customerGroup" => {
+              "customerGroupNumber" => 1
+            },
+            "name" => "Acme Inc",
+            "paymentTerms" => {
+              "paymentTermsNumber" => 2
+            },
+            "vatZone" => {
+              "vatZoneNumber" => 2
+            }
+          }
+        ],
+        "pagination" => {
+          "maxPageSizeAllowed" => 1000,
+          "skipPages" => 0,
+          "pageSize" => 20,
+          "results" => 32,
+          "resultsWithoutFilter" => 32,
+          "firstPage" => "https://restapi.e-conomic.com/customers?skippages=0&pagesize=20",
+          "nextPage" => "https://restapi.e-conomic.com/customers?skippages=1&pagesize=20",
+          "lastPage" => "https://restapi.e-conomic.com/customers?skippages=1&pagesize=20"
+        },
+        "metaData" => {
+          "create" => {
+            "description" => "Create a new customer",
+            "href" => "https://restapi.e-conomic.com/customers",
+            "httpMethod" => "post"
+          }
+        },
+        "self" => "https://restapi.e-conomic.com/customers"
+      }
+    end
+
+    it "returns the first page of Customers from the API" do
+      session = Reconomic::Session.new
+      stub_request(:get, "https://restapi.e-conomic.com/customers?skippages=0")
+        .with(
+          headers: {
+            "Content-Type" => "application/json"
+          }
+        )
+        .to_return(body: @response.to_json, status: 200)
+
+      results = Reconomic::Customer.list(
+        session: session
+      )
+
+      assert_requested(:get, "https://restapi.e-conomic.com/customers?skippages=0")
+      _(results).must_be_instance_of(Reconomic::Collection)
+      _(results.first.name).must_equal("Acme Inc")
+    end
+
+    it "returns the next page of Customers from the API" do
+      session = Reconomic::Session.new
+      stub_request(:get, "https://restapi.e-conomic.com/customers?skippages=1")
+        .with(
+          headers: {
+            "Content-Type" => "application/json"
+          }
+        )
+        .to_return(body: @response.to_json, status: 200)
+
+      Reconomic::Customer.list(
+        session: session,
+        skip_pages: 1
+      )
+
+      assert_requested(:get, "https://restapi.e-conomic.com/customers?skippages=1")
+    end
+  end
+
   describe ".retrieve" do
     it "retrieves a customer from the API" do
       body = "{\"customerNumber\":1,\"name\":\"John Doe\",\"address\":\"Somewhere\"}"

@@ -1,6 +1,7 @@
 require "http"
 require "shale"
 
+require "reconomic/collection"
 require "reconomic/mapper/type/object"
 
 # For more information please look at the Danish e-copedia article
@@ -129,6 +130,8 @@ class Reconomic::Customer
 
   class << self
     def construct_from(json)
+      # TODO: This is stupid; converting from a hash to JSON and back again.
+      json = json.to_json if json.is_a?(Hash)
       Mapper.from_json(json || "")
     end
 
@@ -136,6 +139,11 @@ class Reconomic::Customer
     def create(properties, session:)
       response_body = session.post("/customers", properties.to_json)
       construct_from(response_body)
+    end
+
+    def list(session:, skip_pages: 0)
+      response_body = session.get("/customers", params: {skippages: skip_pages})
+      Reconomic::Collection.construct_from(response_body, model: self)
     end
 
     def retrieve(number:, session:)
